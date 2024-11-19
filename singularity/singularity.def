@@ -1,0 +1,30 @@
+Bootstrap: docker
+From: nvcr.io/nvidia/tensorflow:23.08-tf2-py3
+
+%labels
+    Maintainer Thiago tsaraujo@inf.urgs.br
+    Version 1.0
+
+%post
+    apt-get update && apt-get install -y \
+        build-essential \
+        libglib2.0-0 \
+        libsm6 \
+        libxext6 \
+        libxrender-dev \
+        git \
+        wget \
+        && rm -rf /var/lib/apt/lists/*
+
+    pip install --upgrade pip
+
+
+%environment
+    export PATH="/usr/local/nvidia/bin:${PATH}"
+    export LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}"
+    export TF_FORCE_GPU_ALLOW_GROWTH="true"
+
+%post
+    echo 'export PATH="/usr/local/nvidia/bin:${PATH}"' >> ~/.bashrc
+    echo 'export LD_LIBRARY_PATH="/usr/local/cuda/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}"' >> ~/.bashrc
+    echo 'export TF_FORCE_GPU_ALLOW_GROWTH="true"' >> ~/.bashrc
